@@ -1,9 +1,13 @@
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 dotenv.config();
+import movieRouter from "./routes/movie.route.js";
+import userRouter from "./routes/user.route.js";
+import express from "express";
+import { MongoClient } from "mongodb";
+import cors from "cors";
 
-const express = require("express");
-const { MongoClient } = require("mongodb");
 const app = express();
+app.use(cors());
 
 const PORT = process.env.PORT;
 // const mongo_url = "mongodb://127.0.0.1";
@@ -16,51 +20,7 @@ app.use(express.json());
 app.get("/", function (request, response) {
   response.send("🙋‍♂️, 🌏 🎊✨🤩!!!!!");
 });
-app.get("/movie", async function (request, response) {
-  const movie = await client
-    .db("movie-data")
-    .collection("movies")
-    .find({})
-    .toArray();
-  response.send(movie);
-});
-// app.get("/movie/:id", function (request, response) {
-//   const { id } = request.params;
-//   const one = movie.find((element) => element.id === id);
-//   response.send(one);
-// });
-app.get("/movie/:id", async function (req, res) {
-  const { id } = req.params;
-  const movie = await client
-    .db("movie-data")
-    .collection("movies")
-    .findOne({ id: id });
-  res.send(movie);
-});
-app.delete("/movie/:id", async function (req, res) {
-  const { id } = req.params;
-  const movie = await client
-    .db("movie-data")
-    .collection("movies")
-    .deleteOne({ id: id });
-  res.send(movie);
-});
-app.post("/Addmovies", async function (req, res) {
-  const data = req.body;
-  const movie = await client
-    .db("movie-data")
-    .collection("movies")
-    .insertMany(data);
-  res.send(movie);
-});
-app.put("/movie/:id", async function (req, res) {
-  const { id } = req.params;
-  const data = req.body;
-  const movie = await client
-    .db("movie-data")
-    .collection("movies")
-    .updateOne({ id: id }, { $set: data });
-  res.send(movie);
-});
-
+app.use(`/movie`, movieRouter);
+app.use(`/user`, userRouter);
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
+export { client };
