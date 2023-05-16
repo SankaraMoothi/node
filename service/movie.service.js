@@ -1,20 +1,25 @@
 import { ObjectId } from "mongodb";
 import { client } from "../index.js";
 
-export async function editMovieById(id, data) {
+export async function editMovieById(id, data, userId) {
   return await client
     .db("movie-data")
     .collection("movies")
-    .updateOne({ _id: ObjectId(id) }, { $set: data });
+    .updateOne(
+      { $and: [({ _id: ObjectId(id) }, { userId: userId })] },
+      { $set: data }
+    );
 }
 export async function AddMovie(data) {
   return await client.db("movie-data").collection("movies").insertMany(data);
 }
-export async function deleteMovieById(id) {
+export async function deleteMovieById(id, userId) {
   return await client
     .db("movie-data")
     .collection("movies")
-    .deleteOne({ _id: ObjectId(id) });
+    .findOneAndDelete({
+      $and: [({ _id: ObjectId(id) }, { userId: userId })],
+    });
 }
 export async function getMovieById(id) {
   return await client
