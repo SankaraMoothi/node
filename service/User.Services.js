@@ -13,9 +13,9 @@ export async function getAllUsers() {
 export async function createUsers(data) {
   return await client.db("movie-data").collection("users").insertMany(data);
 }
-export async function getUserByName(name) {
+export async function getUserByName(id) {
   return await client
     .db("movie-data")
     .collection("users")
-    .findOne({ name: name });
+    .findOne({ _id: ObjectId(id) });
 }

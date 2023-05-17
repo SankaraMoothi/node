@@ -9,6 +9,7 @@ import {
   AddMovie,
   editMovieById,
 } from "../service/movie.service.js";
+import { getUserByName } from "../service/User.Services.js";
 router.get("/", auth, async function (request, response) {
   const movie = await getAllMovies();
   response.send(movie);
@@ -40,9 +41,10 @@ router.post("/Addmovies", auth, async function (req, res) {
     res.status(400).json("Not Allowed To Delete Or Edit");
   }
   const userId = userauth.id;
-
+  const nameOfUser = await getUserByName(userId);
   data?.forEach((object) => {
     object.userId = userId;
+    object.userName = nameOfUser.name;
   });
 
   const movie = await AddMovie(data);
