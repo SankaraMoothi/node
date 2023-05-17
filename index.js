@@ -30,7 +30,7 @@ app.use(
 app.use(
   cors({
     credentials: true,
-    origin: "https://mass-movie-hub.netlify.app/",
+    origin: "https://mass-movie-hub.netlify.app",
     methods: "GET,POST,PUT,DELETE",
   })
 );
