@@ -44,10 +44,7 @@ router.post("/login", async (req, res) => {
     if (isPasswordCheck) {
       const token = jwt.sign({ id: userFromDB._id }, process.env.SECRET_KEY);
 
-      res
-        .status(200)
-        .cookie("token", token, { sameSite: "none", secure: true })
-        .json({ id: userFromDB._id });
+      res.status(200).json({ id: userFromDB._id, token });
     } else {
       res.status(400).send({ message: "invalid credentials" });
     }

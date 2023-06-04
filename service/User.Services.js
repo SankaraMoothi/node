@@ -1,5 +1,5 @@
-import { client } from "../index.js";
 import { ObjectId } from "mongodb";
+import { client } from "../index.js";
 
 export async function deleteUserById(id) {
   return await client
@@ -13,7 +13,13 @@ export async function getAllUsers() {
 export async function createUsers(data) {
   return await client.db("movie-data").collection("users").insertMany(data);
 }
-export async function getUserByName(id) {
+export async function getUserByName(name) {
+  return await client
+    .db("movie-data")
+    .collection("users")
+    .findOne({ name: name });
+}
+export async function getUserById(id) {
   return await client
     .db("movie-data")
     .collection("users")

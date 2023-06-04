@@ -2,12 +2,13 @@ import { ObjectId } from "mongodb";
 import { client } from "../index.js";
 
 export async function editMovieById(id, data, userId) {
+  const { token, ...other } = data;
   return await client
     .db("movie-data")
     .collection("movies")
     .updateOne(
       { $and: [({ _id: ObjectId(id) }, { userId: userId })] },
-      { $set: data }
+      { $set: other }
     );
 }
 export async function AddMovie(data) {
